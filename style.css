@@ -3468,20 +3468,26 @@ footer {
 @media (max-width: 768px) {
   .interest-section#interest-index .interest-label {
     font-size: 0.75rem;
-    line-height: 1.15;
+    line-height: 1.2;
     text-align: center;
-    overflow-wrap: anywhere;
-    word-break: break-word;
+    white-space: normal;
+    word-break: keep-all;
+    overflow-wrap: normal;
+    hyphens: auto;
+    max-width: 100%;
   }
 }
 @media (max-width: 480px) {
   .interest-section#interest-index .interest-label {
-    font-size: 0.65rem;
-    line-height: 1.15;
+    font-size: 0.7rem;
+    line-height: 1.2;
     letter-spacing: 0;
     text-align: center;
-    overflow-wrap: anywhere;
-    word-break: break-word;
+    white-space: normal;
+    word-break: keep-all;
+    overflow-wrap: normal;
+    hyphens: auto;
+    max-width: 100%;
   }
   .interest-section#interest-index .interest-circle i {
     font-size: 22px;
@@ -3520,14 +3526,16 @@ footer {
 
 /* Restaurar labels visibles y limpiar tooltip en móviles (solo index) */
 @media (max-width: 768px) {
-  .interest-section#interest-index .interest-label {
-    display: inline-block !important;
+  .interest-section#interest-index .interest-label { display: inline-block !important; 
     font-size: 0.85rem;
     line-height: 1.2;
     text-align: center;
     margin-top: 6px;
-    overflow-wrap: anywhere;
-    word-break: break-word;
+    white-space: normal;
+    word-break: keep-all;
+    overflow-wrap: normal;
+    hyphens: auto;
+    max-width: 100%;
   }
   .interest-section#interest-index .interest-item .interest-circle::after { content: none !important; }
 }
@@ -3538,8 +3546,11 @@ footer {
     line-height: 1.2;
     text-align: center;
     margin-top: 6px;
-    overflow-wrap: anywhere;
-    word-break: break-word;
+    white-space: normal;
+    word-break: keep-all;
+    overflow-wrap: normal;
+    hyphens: auto;
+    max-width: 100%;
   }
   .interest-section#interest-index .interest-item .interest-circle::after { content: none !important; }
 }
