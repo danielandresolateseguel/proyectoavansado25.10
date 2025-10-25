@@ -2109,67 +2109,191 @@ document.addEventListener('DOMContentLoaded', function() {
     if (backToFeaturedBtn && document.body.classList.contains('sector-gastronomia')) {
         backToFeaturedBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            const featured = document.getElementById('featured-dishes');
-            if (featured) {
-                featured.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            } else {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             backToFeaturedBtn.classList.remove('visible');
         });
 
-        const interestProductsSection = document.querySelector('.interest-products');
+        const interestProductsTitle = document.getElementById('interest-products-index-title');
+        const interestProductsSection = interestProductsTitle ? interestProductsTitle.closest('.interest-products.searchable-section') : null;
         if (interestProductsSection) {
-            let backToFeaturedTimer = null;
-            let scrollActivated = false;
-
+            // Mostrar solo cuando la sección "Recomendados por interés" esté en pantalla de forma estable
             const featuredObserver = new IntersectionObserver((entries) => {
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
-                        if (backToFeaturedTimer) clearTimeout(backToFeaturedTimer);
-                        backToFeaturedTimer = setTimeout(() => {
-                            if (!scrollActivated) {
-                                backToFeaturedBtn.classList.add('visible');
-                            }
-                        }, 5000);
+                        backToFeaturedBtn.classList.add('visible');
                     } else {
-                        if (backToFeaturedTimer) {
-                            clearTimeout(backToFeaturedTimer);
-                            backToFeaturedTimer = null;
-                        }
-                        if (!scrollActivated) {
-                            backToFeaturedBtn.classList.remove('visible');
-                        }
+                        backToFeaturedBtn.classList.remove('visible');
                     }
                 });
-            }, { threshold: 0.5 });
+            }, { threshold: 0.4, rootMargin: '0px 0px -30% 0px' });
             featuredObserver.observe(interestProductsSection);
 
-            function updateFloatVisibilityOnScroll() {
-                const interestTop = interestProductsSection.offsetTop;
-                const interestBottom = interestTop + interestProductsSection.offsetHeight;
-                const y = window.scrollY;
-
-                if (y > interestBottom) {
-                    scrollActivated = true;
-                    backToFeaturedBtn.classList.add('visible');
-                } else if (y < interestTop) {
-                    scrollActivated = false;
-                    backToFeaturedBtn.classList.remove('visible');
-                }
+            // Ajuste inicial por si se entra ya en la sección
+            const y = window.scrollY;
+            const top = interestProductsSection.offsetTop;
+            const bottom = top + interestProductsSection.offsetHeight;
+            if (y + window.innerHeight * 0.4 >= top && y <= bottom) {
+                backToFeaturedBtn.classList.add('visible');
+            } else {
+                backToFeaturedBtn.classList.remove('visible');
             }
-
-            window.addEventListener('scroll', () => {
-                clearTimeout(window.__btfScrollDebounce);
-                window.__btfScrollDebounce = setTimeout(() => {
-                    updateFloatVisibilityOnScroll();
-                }, 100);
-            });
-
-            // Estado inicial según posición de scroll
-            updateFloatVisibilityOnScroll();
         }
     }
+
+        // Minimizar y transportar título de Platos destacados
+        if (document.body.classList.contains('sector-gastronomia')) {
+            const featuredSection = document.getElementById('featured-dishes');
+            const featuredTitle = document.getElementById('featured-dishes-title') || (featuredSection ? featuredSection.querySelector('.section-title') : null);
+            const discountsWrapper = featuredSection ? featuredSection.querySelector('.discounts-wrapper') : null;
+
+            if (featuredSection && featuredTitle) {
+                let minimizeTimerId = null;
+                let alreadyMinimized = false;
+
+                const titleVisibilityObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (alreadyMinimized) return;
+                        if (entry.isIntersecting) {
+                            clearTimeout(minimizeTimerId);
+                            minimizeTimerId = setTimeout(() => {
+                                if (alreadyMinimized) return;
+                                alreadyMinimized = true;
+
+                                featuredSection.classList.add('title-collapsing');
+
+                                featuredTitle.style.maxHeight = featuredTitle.offsetHeight + 'px';
+                                void featuredTitle.offsetHeight;
+                                featuredTitle.classList.add('fade-out');
+
+                                let badge = document.getElementById('featured-dishes-badge');
+                                if (!badge) {
+                                    badge = document.createElement('div');
+                                    badge.id = 'featured-dishes-badge';
+                                    badge.className = 'featured-title-badge';
+                                    badge.textContent = featuredTitle.textContent || 'Platos destacados';
+                                    featuredSection.appendChild(badge);
+                                }
+                                badge.style.left = '16px';
+                                const baseTop = discountsWrapper ? discountsWrapper.offsetTop : (featuredTitle.offsetTop || 0);
+                                const initialOffset = Math.max(baseTop - (badge.offsetHeight || 0) - 8, 8);
+                                badge.style.top = initialOffset + 'px';
+                                requestAnimationFrame(() => {
+                                    const badgeEl2 = document.getElementById('featured-dishes-badge');
+                                    if (badgeEl2) badgeEl2.classList.add('appear');
+                                });
+
+                                featuredTitle.addEventListener('transitionend', (ev) => {
+                                    if (ev.propertyName !== 'max-height') return;
+                                    featuredTitle.style.visibility = 'hidden';
+                                    requestAnimationFrame(() => {
+                                        featuredTitle.style.display = 'none';
+                                    });
+
+                                    const badgeEl = document.getElementById('featured-dishes-badge');
+                                    if (badgeEl) {
+                                        requestAnimationFrame(() => {
+                                            requestAnimationFrame(() => {
+                                                const wrapperTopNow = discountsWrapper ? discountsWrapper.offsetTop : (featuredTitle.offsetTop || 0);
+                                                const offsetNow = Math.max(wrapperTopNow - (badgeEl.offsetHeight || 0) - 8, 8);
+                                                badgeEl.style.top = offsetNow + 'px';
+                                            });
+                                        });
+                                    }
+
+                                    featuredSection.classList.add('title-collapsed');
+                                    featuredSection.classList.remove('title-collapsing');
+                                }, { once: true });
+                            }, 5000);
+                        } else {
+                            clearTimeout(minimizeTimerId);
+                        }
+                    });
+                }, { threshold: 0.6 });
+
+                titleVisibilityObserver.observe(featuredTitle);
+            }
+        }
+
+        // Colapso suave del título del Menú Gastronomía y eliminación del hueco
+        const menuSection = document.getElementById('menu-gastronomia');
+        const menuTitle = menuSection ? menuSection.querySelector('.section-title') : null;
+        const menuGrid = menuSection ? menuSection.querySelector('.products-grid') : null;
+
+        if (menuSection && menuTitle) {
+            let menuMinimizeTimerId = null;
+            let menuAlreadyMinimized = false;
+
+            const menuTitleObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (menuAlreadyMinimized) return;
+                    if (entry.isIntersecting) {
+                        clearTimeout(menuMinimizeTimerId);
+                        menuMinimizeTimerId = setTimeout(() => {
+                            if (menuAlreadyMinimized) return;
+                            menuAlreadyMinimized = true;
+
+                            // Marcar estado de colapso para animar padding-top a 0
+                            menuSection.classList.add('title-collapsing');
+
+                            // Colapsar título midiendo altura actual y animando max-height
+                            menuTitle.style.maxHeight = menuTitle.offsetHeight + 'px';
+                            void menuTitle.offsetHeight;
+                            menuTitle.classList.add('fade-out');
+
+                            // Crear badge minimizado si no existe y posicionarlo
+                            let menuBadge = document.getElementById('menu-gastronomia-badge');
+                            if (!menuBadge) {
+                                menuBadge = document.createElement('div');
+                                menuBadge.id = 'menu-gastronomia-badge';
+                                menuBadge.className = 'menu-title-badge';
+                                menuBadge.textContent = menuTitle.textContent || 'Menú principal';
+                                menuSection.appendChild(menuBadge);
+                            }
+                            menuBadge.style.left = '16px';
+                            if (menuGrid) {
+                                const offset = Math.max(menuGrid.offsetTop - (menuBadge.offsetHeight || 0) - 8, 8);
+                                menuBadge.style.top = offset + 'px';
+                            } else {
+                                menuBadge.style.top = (menuTitle.offsetTop + menuTitle.offsetHeight + 8) + 'px';
+                            }
+                            requestAnimationFrame(() => {
+                                const badgeEl2 = document.getElementById('menu-gastronomia-badge');
+                                if (badgeEl2) badgeEl2.classList.add('appear');
+                            });
+
+                            // Al terminar el colapso, ocultar visualmente y retirar del flujo
+                            menuTitle.addEventListener('transitionend', (ev) => {
+                                if (ev.propertyName !== 'max-height') return;
+                                menuTitle.style.visibility = 'hidden';
+                                requestAnimationFrame(() => {
+                                    menuTitle.style.display = 'none';
+                                });
+
+                                // Recalcular posición final del badge tras estabilizar el layout
+                                const badgeEl = document.getElementById('menu-gastronomia-badge');
+                                if (badgeEl) {
+                                    requestAnimationFrame(() => {
+                                        requestAnimationFrame(() => {
+                                            const wrapperTopNow = menuGrid ? menuGrid.offsetTop : (menuTitle.offsetTop || 0);
+                                            const offsetNow = Math.max(wrapperTopNow - (badgeEl.offsetHeight || 0) - 8, 8);
+                                            badgeEl.style.top = offsetNow + 'px';
+                                        });
+                                    });
+                                }
+
+                                // Limpiar y marcar estado colapsado
+                                menuSection.classList.add('title-collapsed');
+                                menuSection.classList.remove('title-collapsing');
+                            }, { once: true });
+                        }, 5000);
+                    } else {
+                        clearTimeout(menuMinimizeTimerId);
+                    }
+                });
+            }, { threshold: 0.6 });
+
+            menuTitleObserver.observe(menuTitle);
+        }
 
     // Hacer funciones globales para acceso desde HTML
     window.toggleAutoPlay = toggleAutoPlay;

@@ -98,15 +98,19 @@
   margin: 16px auto;
   max-width: 980px;
   box-shadow: inset 0 1px 0 rgba(220, 53, 69, 0.12), inset 0 -1px 0 rgba(220, 53, 69, 0.08), 0 2px 10px rgba(0, 0, 0, 0.06);
+  transition: padding-top 750ms ease-out; /* animar reducción del padding superior */
+  will-change: padding-top;
+  position: relative; /* permitir badge posicionado dentro de la sección */
 }
-
 .sector-gastronomia #menu-gastronomia .section-title {
   color: var(--gastro-chip-text, #155e3f);
   text-align: center;
   margin: 0 0 12px;
   font-weight: 700;
+  overflow: hidden; /* permitir colapso suave de altura */
+  transition: opacity 750ms ease-out, transform 750ms ease-out, margin-bottom 750ms ease-out, max-height 750ms ease-out;
+  will-change: opacity, transform, margin-bottom, max-height;
 }
-
 .sector-gastronomia #menu-gastronomia .section-title::after {
   content: "";
   display: block;
@@ -116,11 +120,9 @@
   border-radius: 9999px;
   margin: 8px auto 0;
 }
-
 .sector-gastronomia #menu-gastronomia .products-grid {
   gap: 12px;
 }
-
 .sector-gastronomia #menu-gastronomia .product-card {
   border: 1px solid rgba(220, 53, 69, 0.08);
   border-radius: 12px;
@@ -129,16 +131,13 @@
   overflow: hidden;
   transition: transform 0.12s ease, box-shadow 0.15s ease, border-color 0.15s ease;
 }
-
 .sector-gastronomia #menu-gastronomia .product-card .product-info {
   padding: 12px 14px;
 }
-
 .sector-gastronomia #menu-gastronomia .product-card .product-price {
   color: var(--gastro-chip-text, #155e3f);
   font-weight: 700;
 }
-
 .sector-gastronomia #menu-gastronomia .product-card .add-to-cart-btn {
   appearance: none;
   border: none;
@@ -150,7 +149,6 @@
   cursor: pointer;
   transition: filter 0.15s ease, transform 0.1s ease;
 }
-
 .sector-gastronomia #menu-gastronomia .product-card .add-to-cart-btn:hover {
   filter: brightness(1.04);
   transform: translateY(-1px);
@@ -478,13 +476,19 @@
   }
 
   .sector-gastronomia .discounts-grid {
-    display: flex;        /* una sola línea */
-    flex-wrap: nowrap;    /* no permitir salto de línea */
-    gap: 16px;
-    margin: 10px 0;
-    padding-bottom: 0;
-    min-width: max-content; /* asegurar ancho según contenido para scroll horizontal */
-  }
+  display: flex;        /* una sola línea */
+  flex-wrap: nowrap;    /* no permitir salto de línea */
+  gap: 16px;
+  margin: 10px 0;
+  padding-bottom: 0;
+  min-width: max-content; /* asegurar ancho según contenido para scroll horizontal */
+  transition: margin-top 750ms ease-out;
+}
+
+/* Cuando el título colapsa, reduce el margen superior del grid para evitar hueco */
+.sector-gastronomia .special-discounts .section-title.fade-out + .discounts-wrapper .discounts-grid {
+  margin-top: 0;
+}
 }
 .sector-gastronomia #menu-gastronomia .product-card::before {
   content: "";
@@ -496,4 +500,123 @@
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(220, 53, 69, 0.12);
   border-color: rgba(220, 53, 69, 0.16);
+}
+
+.sector-gastronomia .special-discounts {
+  position: relative; /* para posicionamiento absoluto del badge dentro de la sección */
+  transition: padding-top 750ms ease-out; /* animar reducción de padding superior */
+  will-change: padding-top;
+}
+.sector-gastronomia .special-discounts .section-title {
+  transition: opacity 750ms ease-out, transform 750ms ease-out, margin-bottom 750ms ease-out, max-height 750ms ease-out;
+  will-change: opacity, transform, margin-bottom, max-height;
+  overflow: hidden; /* permite colapsar altura suavemente */
+}
+
+.sector-gastronomia #menu-gastronomia .products-grid {
+  gap: 12px;
+  transition: margin-top 750ms ease-out; /* suavizar ascenso del grid */
+}
+.sector-gastronomia #menu-gastronomia .section-title.fade-out {
+  opacity: 0;
+  transform: translateY(-6px) scale(0.98);
+  margin-bottom: 0;
+  max-height: 0;   /* colapsar altura */
+  margin-top: 0;   /* evitar margen residual */
+  padding: 0;      /* evitar altura por padding */
+  line-height: 0;  /* minimizar altura del contenido */
+}
+.sector-gastronomia #menu-gastronomia .section-title.fade-out + .products-grid {
+  margin-top: 0; /* eliminar separación cuando el título colapsa */
+}
+.sector-gastronomia #menu-gastronomia.title-collapsing {
+  padding-top: 0;
+}
+.sector-gastronomia .special-discounts .section-title.fade-out {
+  opacity: 0;
+  transform: translateY(-6px) scale(0.98);
+  margin-bottom: 0;
+  max-height: 0; /* colapsa la altura gradualmente */
+  margin-top: 0; /* asegurar sin margen superior residual */
+  padding: 0; /* evitar altura por padding */
+  line-height: 0; /* minimizar altura del contenido */
+}
+#featured-dishes-badge.featured-title-badge {
+  position: absolute;
+  left: 16px;
+  top: 8px; /* se recalcula en JS; este valor es fallback */
+  padding: 6px 10px;
+  font-size: 12px;
+  line-height: 1;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,.2);
+  opacity: 0;
+  transform: scale(0.9);
+  pointer-events: none;
+  transition: opacity 500ms ease-out, transform 500ms ease-out;
+}
+
+#featured-dishes-badge.featured-title-badge.appear {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Badge para título minimizado del Menú Gastronomía */
+#menu-gastronomia-badge.menu-title-badge {
+  position: absolute;
+  left: 16px;
+  top: 8px; /* se recalcula en JS; fallback */
+  padding: 6px 10px;
+  font-size: 12px;
+  line-height: 1;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,.2);
+  opacity: 0;
+  transform: scale(0.9);
+  pointer-events: none;
+  transition: opacity 500ms ease-out, transform 500ms ease-out;
+}
+#menu-gastronomia-badge.menu-title-badge.appear {
+  opacity: 1;
+  transform: scale(1);
+}
+}
+.sector-gastronomia .special-discounts.title-collapsing {
+  padding-top: 0;
+}
+/* Estado de sección durante el colapso del título: eliminar padding superior para evitar hueco */
+.sector-gastronomia .special-discounts .section-title.fade-out {
+  opacity: 0;
+  transform: translateY(-6px) scale(0.98);
+  margin-bottom: 0;
+  max-height: 0; /* colapsa la altura gradualmente */
+  margin-top: 0; /* asegurar sin margen superior residual */
+  padding: 0; /* evitar altura por padding */
+  line-height: 0; /* minimizar altura del contenido */
+}
+#featured-dishes-badge.featured-title-badge {
+  position: absolute;
+  left: 16px;
+  top: 8px; /* se recalcula en JS; este valor es fallback */
+  padding: 6px 10px;
+  font-size: 12px;
+  line-height: 1;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,.2);
+  opacity: 0;
+  transform: scale(0.9);
+  pointer-events: none;
+  transition: opacity 500ms ease-out, transform 500ms ease-out;
+}
+
+#featured-dishes-badge.featured-title-badge.appear {
+  opacity: 1;
+  transform: scale(1);
+}
 }
