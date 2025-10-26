@@ -2481,6 +2481,11 @@ footer {
     .product-card {
         font-size: 14px;
     }
+    .product-card .product-image img {
+        height: 100% !important;
+        width: 100%;
+        object-fit: cover !important;
+    }
     
     .product-info {
         padding: 12px;
@@ -3046,6 +3051,11 @@ footer {
     .discount-card .product-image {
         height: 120px;
     }
+    .discount-card .product-image img {
+        height: 100% !important;
+        width: 100%;
+        object-fit: cover !important;
+    }
     
     .discount-card .product-info {
         padding: 10px;
@@ -3112,6 +3122,11 @@ footer {
     
     .discount-card .product-image {
         height: 90px;
+    }
+    .discount-card .product-image img {
+        height: 100% !important;
+        width: 100%;
+        object-fit: cover !important;
     }
     
     .discount-card .product-info {
