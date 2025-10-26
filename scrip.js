@@ -2172,10 +2172,16 @@ document.addEventListener('DOMContentLoaded', function() {
                                     badge.className = 'featured-title-badge';
                                     badge.textContent = featuredTitle.textContent || 'Platos destacados';
                                     featuredSection.appendChild(badge);
+                                    // Aplicar color y peso tipográfico original del título
+                                    try {
+                                        const computed = window.getComputedStyle(featuredTitle);
+                                        badge.style.color = (computed && computed.color) ? computed.color : '#4a6fa5';
+                                        badge.style.fontWeight = computed.fontWeight;
+                                    } catch (_) {}
                                 }
                                 badge.style.left = '16px';
                                 const baseTop = discountsWrapper ? discountsWrapper.offsetTop : (featuredTitle.offsetTop || 0);
-                                const initialOffset = Math.max(baseTop - (badge.offsetHeight || 0) - 8, 8);
+                                const initialOffset = 4; // Colocar el badge más pegado al borde superior de la sección
                                 badge.style.top = initialOffset + 'px';
                                 requestAnimationFrame(() => {
                                     const badgeEl2 = document.getElementById('featured-dishes-badge');
@@ -2194,7 +2200,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                         requestAnimationFrame(() => {
                                             requestAnimationFrame(() => {
                                                 const wrapperTopNow = discountsWrapper ? discountsWrapper.offsetTop : (featuredTitle.offsetTop || 0);
-                                                const offsetNow = Math.max(wrapperTopNow - (badgeEl.offsetHeight || 0) - 8, 8);
+                                                const offsetNow = 4; // Mantener el badge pegado al borde superior
                                                 badgeEl.style.top = offsetNow + 'px';
                                             });
                                         });
@@ -2248,13 +2254,19 @@ document.addEventListener('DOMContentLoaded', function() {
                                 menuBadge.className = 'menu-title-badge';
                                 menuBadge.textContent = menuTitle.textContent || 'Menú principal';
                                 menuSection.appendChild(menuBadge);
+                                // Aplicar color y peso tipográfico original del título
+                                try {
+                                    const computed = window.getComputedStyle(menuTitle);
+                                    menuBadge.style.color = (computed && computed.color) ? computed.color : '#4a6fa5';
+                                    menuBadge.style.fontWeight = computed.fontWeight;
+                                } catch (_) {}
                             }
                             menuBadge.style.left = '16px';
                             if (menuGrid) {
-                                const offset = Math.max(menuGrid.offsetTop - (menuBadge.offsetHeight || 0) - 8, 8);
+                                const offset = 4; // Colocar el badge más pegado al borde superior
                                 menuBadge.style.top = offset + 'px';
                             } else {
-                                menuBadge.style.top = (menuTitle.offsetTop + menuTitle.offsetHeight + 8) + 'px';
+                                menuBadge.style.top = '4px';
                             }
                             requestAnimationFrame(() => {
                                 const badgeEl2 = document.getElementById('menu-gastronomia-badge');
@@ -2275,7 +2287,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                     requestAnimationFrame(() => {
                                         requestAnimationFrame(() => {
                                             const wrapperTopNow = menuGrid ? menuGrid.offsetTop : (menuTitle.offsetTop || 0);
-                                            const offsetNow = Math.max(wrapperTopNow - (badgeEl.offsetHeight || 0) - 8, 8);
+                                            const offsetNow = 4; // Mantener el badge pegado al borde superior
                                             badgeEl.style.top = offsetNow + 'px';
                                         });
                                     });
@@ -2340,9 +2352,8 @@ function formatInterestLabelsForMobile() {
         }
 
         if (isMobile) {
-            // Apilar palabras en móviles
-            const words = originalText.split(/\s+/).filter(Boolean);
-            label.innerHTML = words.join('<br>');
+            // Mantener texto completo sin forzar saltos de palabra
+            label.textContent = originalText;
         } else {
             // Restaurar texto original en pantallas grandes
             label.textContent = label.dataset.originalLabel || originalText;
