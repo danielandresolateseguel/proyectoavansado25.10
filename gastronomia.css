@@ -39,7 +39,8 @@
   /* Fila 1: Solo "Todos" ocupando toda la fila */
   .filter-btn[data-filter="todos"] {
     grid-column: 1 / -1;
-    justify-self: center;
+    justify-self: stretch;
+    width: 100%;
   }
 
   /* Ajustes de ancho uniforme y centrado de texto para chips en móviles */
