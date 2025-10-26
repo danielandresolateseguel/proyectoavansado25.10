@@ -42,6 +42,17 @@
     justify-self: center;
   }
 
+  /* Ajustes de ancho uniforme y centrado de texto para chips en móviles */
+  .filter-btn {
+    box-sizing: border-box;
+    text-align: center;
+  }
+
+  /* Mantener "Todos" sin forzar ancho completo; los demás ocupan el 100% de su celda */
+  .filter-btn:not([data-filter="todos"]) {
+    width: 100%;
+  }
+
   /* Fila 2: Pizzas, Sandwich, Al plato */
   .filter-btn[data-filter="pizzas"] {
     grid-row: 2;
