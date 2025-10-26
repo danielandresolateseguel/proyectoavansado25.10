@@ -25,6 +25,67 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
 }
 
+/* Layout específico para móviles: 3 filas organizadas */
+@media (max-width: 768px) {
+  .category-filter {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+    padding: 16px;
+  }
+  
+  /* Crear contenedores para cada fila */
+  .filter-row {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  
+  /* Fila 1: Solo "Todos" - centrado */
+  .filter-btn[data-filter="todos"] {
+    order: 1;
+    width: auto;
+    flex: 0 0 auto;
+  }
+  
+  /* Fila 2: Pizzas, Sandwich, Al plato */
+  .filter-btn[data-filter="pizzas"] {
+    order: 2;
+  }
+  
+  .filter-btn[data-filter="sandwich"] {
+    order: 3;
+  }
+  
+  .filter-btn[data-filter="al-plato"] {
+    order: 4;
+  }
+  
+  /* Fila 3: Comen dos, Bebidas, Postres */
+  .filter-btn[data-filter="comen-dos"] {
+    order: 5;
+  }
+  
+  .filter-btn[data-filter="bebidas-cocteles"] {
+    order: 6;
+  }
+  
+  .filter-btn[data-filter="postres"] {
+    order: 7;
+  }
+  
+  /* Forzar saltos de línea después de ciertos elementos */
+  .filter-btn[data-filter="todos"]::after,
+  .filter-btn[data-filter="al-plato"]::after {
+    content: "";
+    flex-basis: 100%;
+    height: 0;
+  }
+}
+
 /* Espaciado con el carrito debajo */
 .category-filter + .shopping-cart {
   margin-top: 12px;
