@@ -29,60 +29,65 @@
 @media (max-width: 768px) {
   .category-filter {
     display: flex;
-    flex-direction: column;
-    gap: 12px;
-    align-items: center;
-    padding: 16px;
-  }
-  
-  /* Crear contenedores para cada fila */
-  .filter-row {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
     flex-wrap: wrap;
-    width: 100%;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
   }
   
   /* Fila 1: Solo "Todos" - centrado */
   .filter-btn[data-filter="todos"] {
     order: 1;
-    width: auto;
-    flex: 0 0 auto;
+    flex-basis: 100%;
+    text-align: center;
+    margin-bottom: 4px;
   }
   
   /* Fila 2: Pizzas, Sandwich, Al plato */
   .filter-btn[data-filter="pizzas"] {
     order: 2;
+    flex: 1;
+    max-width: calc(33.333% - 6px);
   }
   
   .filter-btn[data-filter="sandwich"] {
     order: 3;
+    flex: 1;
+    max-width: calc(33.333% - 6px);
   }
   
   .filter-btn[data-filter="al-plato"] {
     order: 4;
+    flex: 1;
+    max-width: calc(33.333% - 6px);
+  }
+  
+  /* Salto de línea después de "Al plato" */
+  .filter-btn[data-filter="al-plato"]::after {
+    content: "";
+    flex-basis: 100%;
+    height: 0;
+    order: 4.5;
   }
   
   /* Fila 3: Comen dos, Bebidas, Postres */
   .filter-btn[data-filter="comen-dos"] {
     order: 5;
+    flex: 1;
+    max-width: calc(33.333% - 6px);
   }
   
   .filter-btn[data-filter="bebidas-cocteles"] {
     order: 6;
+    flex: 1;
+    max-width: calc(33.333% - 6px);
   }
   
   .filter-btn[data-filter="postres"] {
     order: 7;
-  }
-  
-  /* Forzar saltos de línea después de ciertos elementos */
-  .filter-btn[data-filter="todos"]::after,
-  .filter-btn[data-filter="al-plato"]::after {
-    content: "";
-    flex-basis: 100%;
-    height: 0;
+    flex: 1;
+    max-width: calc(33.333% - 6px);
   }
 }
 
