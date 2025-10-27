@@ -599,7 +599,7 @@
   line-height: 0;  /* minimizar altura del contenido */
 }
 .sector-gastronomia #menu-gastronomia .section-title.fade-out + .products-grid {
-  margin-top: 0; /* eliminar separación cuando el título colapsa */
+  margin-top: 14px; /* dejar espacio para el badge en móviles */
 }
 .sector-gastronomia #menu-gastronomia.title-collapsing {
   padding-top: 6px;
@@ -696,4 +696,9 @@
 #featured-dishes-badge.featured-title-badge.appear {
   opacity: 1;
   transform: none;
+}
+/* Separación adicional en móviles: evitar que el badge se superponga al grid de descuentos */
+.sector-gastronomia .special-discounts .section-title.fade-out + .discounts-wrapper .discounts-grid {
+  margin-top: 14px;
+}
 }
