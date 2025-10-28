@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const VENDOR_ID = window.VENDOR_ID || document.body.getAttribute('data-vendor') || 'default';
     const WHATSAPP_NUMBER = window.WHATSAPP_NUMBER || '+5492615893590'; // sobrescribir en cada HTML
     const CART_STORAGE_KEY = window.CART_STORAGE_KEY || (`cart_${CATEGORY}_${VENDOR_ID}`);
-    const CHECKOUT_MODE = window.CHECKOUT_MODE || (CATEGORY === 'servicios' ? 'whatsapp' : CATEGORY === 'comercio' ? 'envio' : CATEGORY === 'gastronomia' ? 'mesa' : 'general');
+    const CHECKOUT_MODE = window.CHECKOUT_MODE || (CATEGORY === 'servicios' ? 'whatsapp' : CATEGORY === 'comercio' ? 'whatsapp' : CATEGORY === 'gastronomia' ? 'mesa' : 'general');
     console.info('Cart key:', CART_STORAGE_KEY, 'Mode:', CHECKOUT_MODE);
 
     // Etiquetas del botón de checkout según modo
@@ -233,6 +233,95 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Aplicar filtro inicial
         applyCategoryFilter();
+    }
+
+    // Filtro de categorías (Index - electrónica)
+    const indexCategoryFilter = document.getElementById('index-category-filter');
+    let selectedIndexCategory = 'todos';
+
+    function itemMatchesIndexSelectedCategory(item) {
+        const catAttr = (item.getAttribute('data-product-category') || '').toLowerCase();
+        const categories = catAttr.split(',').map(c => c.trim());
+        if (selectedIndexCategory === 'todos') return true;
+        return categories.includes(selectedIndexCategory);
+    }
+
+    function applyIndexCategoryFilter() {
+        const menuSection = document.getElementById('menu-electronica');
+        searchableItems.forEach(item => {
+            const isInMenuSection = menuSection && menuSection.contains(item);
+            if (!isInMenuSection) {
+                // No aplicar filtros fuera del menú de electrónica
+                item.style.display = '';
+                return;
+            }
+            item.style.display = itemMatchesIndexSelectedCategory(item) ? '' : 'none';
+        });
+    }
+
+    if (indexCategoryFilter) {
+        const filterButtons = indexCategoryFilter.querySelectorAll('.filter-btn');
+        const toggleBtn = document.getElementById('index-category-toggle');
+        const inlineContainer = toggleBtn ? toggleBtn.parentElement : null; // .category-filter-inline
+
+        // Toggle del menú desplegable
+        if (toggleBtn && inlineContainer) {
+            toggleBtn.addEventListener('click', () => {
+                const isOpen = inlineContainer.classList.toggle('open');
+                toggleBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+            });
+
+            // Cerrar al hacer click fuera
+            document.addEventListener('click', (e) => {
+                if (!inlineContainer.contains(e.target)) {
+                    inlineContainer.classList.remove('open');
+                    toggleBtn.setAttribute('aria-expanded', 'false');
+                }
+            });
+        }
+
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Estado activo visual
+                filterButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                // Aplicar categoría
+                selectedIndexCategory = btn.getAttribute('data-filter') || 'todos';
+                applyIndexCategoryFilter();
+
+                // Cerrar el menú tras seleccionar
+                if (inlineContainer && toggleBtn) {
+                    inlineContainer.classList.remove('open');
+                    toggleBtn.setAttribute('aria-expanded', 'false');
+                }
+
+                // Reaplicar búsqueda si está activa, respetando el filtro de Index
+                const searchTerm = searchInput.value.trim().toLowerCase();
+                const searchResultsSection = document.querySelector('.search-results');
+                if (searchTerm !== '' && searchResultsSection.classList.contains('active')) {
+                    const menuSection = document.getElementById('menu-electronica');
+                    const interestSection = document.querySelector('.interest-products');
+
+                    const menuItemsForSearch = Array.from(searchableItems).filter(item => {
+                        const isInMenuSection = menuSection && menuSection.contains(item);
+                        return isInMenuSection && itemMatchesIndexSelectedCategory(item);
+                    });
+
+                    const interestItemsForSearch = Array.from(searchableItems).filter(item => {
+                        const isInInterestSection = interestSection && interestSection.contains(item);
+                        return isInInterestSection;
+                    });
+
+                    const filteredItemsForSearch = [...menuItemsForSearch, ...interestItemsForSearch];
+                    const results = performSearch(searchTerm, filteredItemsForSearch);
+                    displayResults(results, searchTerm, resultsContainer);
+                }
+            });
+        });
+
+        // Aplicar filtro inicial
+        applyIndexCategoryFilter();
     }
     
     // Función para escapar caracteres especiales en una expresión regular
@@ -849,7 +938,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Obtener modalidad de pedido y datos adicionales
         const orderTypeEl = document.querySelector('input[name="orderType"]:checked');
-        const orderType = orderTypeEl ? orderTypeEl.value : (CHECKOUT_MODE === 'mesa' ? 'mesa' : 'direccion');
+        // Si no hay selección (páginas sin radios), usar 'mesa' solo en gastronomía; en comercio/general no requerir dirección
+        const orderType = orderTypeEl ? orderTypeEl.value : (CHECKOUT_MODE === 'mesa' ? 'mesa' : 'none');
         const mesaNumberEl = document.getElementById('mesa-number');
         const addressEl = document.getElementById('delivery-address');
         const mesaNumber = mesaNumberEl ? (mesaNumberEl.value || '').trim() : '';
@@ -868,11 +958,12 @@ document.addEventListener('DOMContentLoaded', function() {
         let mensaje = '¡Hola! 👋 Espero que estés muy bien.\n\n';
         mensaje += '🛒 Me gustaría realizar el siguiente pedido:\n\n';
 
-        // Modalidad de pedido
-        mensaje += `📍 Modalidad: ${orderType === 'mesa' ? 'Mesa' : 'Dirección'}\n`;
+        // Modalidad de pedido (solo si aplica)
         if (orderType === 'mesa') {
+            mensaje += `📍 Modalidad: Mesa\n`;
             mensaje += `   🪑 Mesa N°: ${mesaNumber}\n\n`;
-        } else {
+        } else if (orderType === 'direccion') {
+            mensaje += `📍 Modalidad: Dirección\n`;
             mensaje += `   🏠 Dirección: ${address}\n\n`;
         }
         
@@ -889,7 +980,12 @@ document.addEventListener('DOMContentLoaded', function() {
         // Agregar el total y sugerencia de propina si corresponde
         const totalNumber = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
         const totalText = '$' + parseInt(totalNumber).toLocaleString('es-AR') + ' ARS';
-        mensaje += `💰 TOTAL (sin propina): ${totalText}\n`;
+        // En comercio no mostrar "(sin propina)"
+        if (CATEGORY === 'comercio') {
+            mensaje += `💰 TOTAL: ${totalText}\n\n`;
+        } else {
+            mensaje += `💰 TOTAL (sin propina): ${totalText}\n`;
+        }
         if (orderType === 'mesa') {
             const tip = Math.round(totalNumber * 0.10);
             const tipText = '$' + parseInt(tip).toLocaleString('es-AR') + ' ARS';
@@ -902,6 +998,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         if (orderType !== 'mesa') {
             mensaje += '¿Podrías confirmarme la disponibilidad y el método de entrega?\n\n';
+        }
+        // En comercio, consultar métodos de pago disponibles
+        if (CATEGORY === 'comercio') {
+            mensaje += '¿Qué métodos de pago aceptan? (efectivo, débito, crédito, transferencia)\n\n';
         }
         mensaje += '¡Muchas gracias! 😊';
         

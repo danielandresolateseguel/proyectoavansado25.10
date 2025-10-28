@@ -5,6 +5,11 @@
     box-sizing: border-box;
 }
 
+/* Evitar desbordes horizontales que generan espacios en blanco laterales */
+html, body {
+    overflow-x: hidden;
+}
+
 /* Estilos del carrusel */
 .carousel-section {
     width: 100vw;
@@ -415,6 +420,28 @@ button.indicator {
 }
 
 /* Para móviles */
+
+/* ====== Filtro de categorías (Index - solo sector general) ====== */
+.sector-general .category-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 8px 0 16px;
+}
+.sector-general .category-filter .filter-btn {
+    padding: 8px 12px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    background: #fff;
+    color: #333;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+.sector-general .category-filter .filter-btn.active {
+    background: #222;
+    color: #fff;
+    border-color: #222;
+}
 @media (max-width: 480px) {
     .carousel-container .carousel-indicators .indicator,
     .carousel-container .carousel-indicators button.indicator,
@@ -3587,4 +3614,62 @@ footer {
     text-overflow: ellipsis;
   }
   .interest-section#interest-index .interest-item .interest-circle::after { content: none !important; }
+}
+/* ====== Encabezado en línea para sección de productos ====== */
+.section-header-inline {
+    display: flex;
+    align-items: baseline; /* Alinear en la misma línea visual */
+    gap: 12px;
+    flex-wrap: nowrap;
+}
+.section-header-inline .section-title {
+    margin: 0; /* Eliminar margen que desplaza el botón */
+    line-height: 1.2;
+    padding: 0;
+}
+.category-filter-inline {
+    position: relative;
+}
+.category-filter-toggle {
+    padding: 6px 10px;
+    border-radius: 6px; /* Curva mínima, más cuadrado */
+    border: 1px solid #ccc;
+    background: #fff;
+    color: #333;
+    cursor: pointer;
+    font-size: 0.95rem;
+    line-height: 1.2;
+}
+.category-filter-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    display: none;
+    background: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    border-radius: 10px;
+    padding: 8px;
+    z-index: 1000;
+    min-width: 220px;
+}
+.category-filter-inline.open .category-filter-menu {
+    display: block;
+}
+.category-filter-menu .filter-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: #333;
+}
+.category-filter-menu .filter-btn:hover {
+    background: #f5f5f5;
+}
+.category-filter-menu .filter-btn.active {
+    background: #222;
+    color: #fff;
 }

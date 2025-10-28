@@ -328,11 +328,26 @@
         </section>
         <!-- Fin: Sección de intereses en tira (círculos) -->
 
-        <section class="products searchable-section">
-            <h2 id="products-index-title" class="section-title">Nuestros Productos</h2>
+        <section class="products searchable-section" id="menu-electronica">
+            <div class="section-header-inline">
+                <h2 id="products-index-title" class="section-title">Nuestros Productos</h2>
+                <div class="category-filter-inline">
+                    <button id="index-category-toggle" class="category-filter-toggle" aria-haspopup="true" aria-expanded="false">Categorías</button>
+                    <!-- Menú desplegable de categorías (Index) -->
+                    <section class="category-filter-menu" id="index-category-filter" aria-label="Filtrar por categorías" role="menu">
+                        <button class="filter-btn active" data-filter="todos" role="menuitem">Todos</button>
+                        <button class="filter-btn" data-filter="consolas" role="menuitem">Consolas</button>
+                        <button class="filter-btn" data-filter="auriculares" role="menuitem">Auriculares</button>
+                        <button class="filter-btn" data-filter="laptops" role="menuitem">Laptops</button>
+                        <button class="filter-btn" data-filter="teclados" role="menuitem">Teclados</button>
+                        <button class="filter-btn" data-filter="smartphone" role="menuitem">Smartphone</button>
+                        <button class="filter-btn" data-filter="accesorios" role="menuitem">Accesorios</button>
+                    </section>
+                </div>
+            </div>
             <div class="products-grid">
                 <!-- Producto 1 -->
-                <div class="product-card searchable-item" id="producto1">
+                <div class="product-card searchable-item" id="producto1" data-product-category="smartphone">
                     <div class="product-image">
                         <img src="Imagenes/asus-proart-p16.png" alt="Smartphone XYZ" width="800" height="600" loading="lazy">
                     </div>
@@ -345,7 +360,7 @@
                 </div>
 
                 <!-- Producto 2 -->
-                <div class="product-card searchable-item" id="producto2">
+                <div class="product-card searchable-item" id="producto2" data-product-category="laptos,laptops">
                     <div class="product-image">
                         <img src="Imagenes/xbox.png" alt="Laptop Pro" width="800" height="600" loading="lazy">
                     </div>
@@ -358,7 +373,7 @@
                 </div>
 
                 <!-- Producto 3 -->
-                <div class="product-card searchable-item" id="producto3">
+                <div class="product-card searchable-item" id="producto3" data-product-category="auriculares">
                     <div class="product-image">
                         <img src="Imagenes/xbox.png" alt="Auriculares Inalámbricos" width="800" height="600" loading="lazy">
                     </div>
@@ -371,7 +386,7 @@
                 </div>
 
                 <!-- Producto 4 -->
-                <div class="product-card searchable-item" id="producto4">
+                <div class="product-card searchable-item" id="producto4" data-product-category="accesorios">
                     <div class="product-image">
                         <img src="Imagenes/asus-proart-p16.png" alt="Smartwatch Fitness" width="800" height="600" loading="lazy">
                     </div>
@@ -384,7 +399,7 @@
                 </div>
 
                 <!-- Producto 5 -->
-                <div class="product-card searchable-item" id="producto5">
+                <div class="product-card searchable-item" id="producto5" data-product-category="accesorios">
                     <div class="product-image">
                         <img src="Imagenes/asus-proart-p16.png" alt="Tablet Ultra" width="800" height="600" loading="lazy">
                     </div>
@@ -397,7 +412,7 @@
                 </div>
 
                 <!-- Producto 6 -->
-                <div class="product-card searchable-item" id="producto6">
+                <div class="product-card searchable-item" id="producto6" data-product-category="accesorios">
                     <div class="product-image">
                         <img src="Imagenes/images.jfif" alt="Cámara DSLR" width="800" height="600" loading="lazy">
                     </div>
@@ -410,7 +425,7 @@
                 </div>
 
                 <!-- Producto 7 -->
-                <div class="product-card searchable-item" id="producto7">
+                <div class="product-card searchable-item" id="producto7" data-product-category="accesorios">
                     <div class="product-image">
                         <img src="Imagenes/Xbox-01-copia-1024x1024.png" alt="Altavoz Bluetooth" width="800" height="600" loading="lazy">
                     </div>
@@ -423,7 +438,7 @@
                 </div>
 
                 <!-- Producto 8 -->
-                <div class="product-card searchable-item" id="producto8">
+                <div class="product-card searchable-item" id="producto8" data-product-category="accesorios">
                     <div class="product-image">
                         <img src="Imagenes/xbox.png" alt="Monitor Curvo" width="800" height="600" loading="lazy">
                     </div>
@@ -436,7 +451,7 @@
                 </div>
 
                 <!-- Producto 9 -->
-                <div class="product-card searchable-item" id="producto9">
+                <div class="product-card searchable-item" id="producto9" data-product-category="teclados">
                     <div class="product-image">
                         <img src="Imagenes/asus-proart-p16.png" alt="Teclado Mecánico" width="800" height="600" loading="lazy">
                     </div>
@@ -449,7 +464,7 @@
                 </div>
 
                 <!-- Producto 10 -->
-                <div class="product-card searchable-item" id="producto10">
+                <div class="product-card searchable-item" id="producto10" data-product-category="accesorios">
                     <div class="product-image">
                         <img src="Imagenes/Xbox-01-copia-1024x1024.png" alt="Drone 4K" width="800" height="600" loading="lazy">
                     </div>
