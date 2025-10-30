@@ -588,7 +588,7 @@ header {
 
 .contact-item-compact i {
     font-size: 1rem;
-    color: #25d366;
+    color: inherit;
 }
 
 .contact-item-compact i.fa-map-marker-alt {
@@ -613,6 +613,7 @@ header {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    color: transparent; /* asegurar gradiente en navegadores no-webkit */
 }
 
 /* Estilos para enlaces de contacto */
