@@ -553,6 +553,7 @@ header {
     display: flex;
     align-items: center;
     gap: 12px;
+    margin-left: auto;
 }
 
 @media (max-width: 1024px) {
@@ -676,16 +677,21 @@ header h1 {
 /* Header container para búsqueda y carrito */
 .header-top {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     padding: 0 20px;
-    gap: 1rem;
+    gap: 0.5rem;
 }
 
 .header-bottom {
     display: flex;
     justify-content: center;
     padding: 1rem 20px 0;
+}
+
+/* Ubicar carrito a la derecha del header */
+.cart-icon {
+    margin-left: 0;
 }
 
 /* Contenedor de búsqueda */
@@ -2458,7 +2464,7 @@ footer {
         flex-direction: row;
         flex-wrap: wrap;
         gap: 0.5rem;
-        justify-content: space-between;
+        justify-content: flex-start;
     }
     
     .header-bottom {
@@ -2497,6 +2503,8 @@ footer {
         order: 3;
         flex-shrink: 0;
     }
+    /* Empujar bloque de íconos hacia la derecha en móviles */
+    .header-contact { margin-left: auto; }
     
     .contact-item-compact {
         font-size: 0.7rem;
@@ -2506,8 +2514,9 @@ footer {
     .cart-icon {
         padding: 4px 8px;
         font-size: 18px;
-        order: 2;
+        order: 99; /* ubicar al final en móviles */
         flex-shrink: 0;
+        margin-left: 0;
     }
     
     /* Asegurar que los resultados de búsqueda estén ocultos por defecto en móviles */
