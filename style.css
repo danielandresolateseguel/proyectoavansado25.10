@@ -599,6 +599,33 @@ header {
     color: #3498db;
 }
 
+/* Colores específicos para redes sociales */
+.contact-item-compact i.fa-whatsapp {
+    color: #25d366;
+}
+
+.contact-item-compact i.fa-facebook {
+    color: #1877f2;
+}
+
+.contact-item-compact i.fa-instagram {
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Estilos para enlaces de contacto */
+a.contact-item-compact {
+    text-decoration: none;
+    color: inherit;
+}
+
+a.contact-item-compact:hover {
+    text-decoration: none;
+    color: inherit;
+}
+
 @media (max-width: 768px) {
     .header-contact {
         flex-direction: row;

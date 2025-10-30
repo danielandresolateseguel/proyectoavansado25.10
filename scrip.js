@@ -980,8 +980,10 @@ document.addEventListener('DOMContentLoaded', function() {
         // Agregar el total y sugerencia de propina si corresponde
         const totalNumber = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
         const totalText = '$' + parseInt(totalNumber).toLocaleString('es-AR') + ' ARS';
-        // En comercio no mostrar "(sin propina)"
-        if (CATEGORY === 'comercio') {
+        // En comercio y general (plantilla base) no mostrar "(sin propina)" (comparación robusta por minúsculas)
+        const currentCategory = (CATEGORY || (document.body && document.body.dataset && document.body.dataset.category) || '').toLowerCase();
+        const isCommerce = currentCategory === 'comercio' || currentCategory === 'general';
+        if (isCommerce) {
             mensaje += `💰 TOTAL: ${totalText}\n\n`;
         } else {
             mensaje += `💰 TOTAL (sin propina): ${totalText}\n`;
@@ -1000,7 +1002,7 @@ document.addEventListener('DOMContentLoaded', function() {
             mensaje += '¿Podrías confirmarme la disponibilidad y el método de entrega?\n\n';
         }
         // En comercio, consultar métodos de pago disponibles
-        if (CATEGORY === 'comercio') {
+        if (isCommerce) {
             mensaje += '¿Qué métodos de pago aceptan? (efectivo, débito, crédito, transferencia)\n\n';
         }
         mensaje += '¡Muchas gracias! 😊';
